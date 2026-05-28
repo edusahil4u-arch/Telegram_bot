@@ -1,17 +1,7 @@
 """
 Telegram Affiliate Marketing Bot
 ==================================
-Features:
-- Welcome new members
-- Answer FAQs
-- Schedule/auto-post affiliate products
-- Admin commands to add products & FAQs
 
-HOW TO SETUP:
-1. Replace BOT_TOKEN with your token from @BotFather
-2. Replace CHANNEL_ID with your channel ID (e.g. @mychannel or -100xxxxxxxx)
-3. Replace ADMIN_ID with your Telegram user ID (get it from @userinfobot)
-"""
 
 import logging
 import asyncio
