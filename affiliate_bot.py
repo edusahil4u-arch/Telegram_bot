@@ -1,11 +1,14 @@
 """
-Telegram Affiliate Marketing Bot"""
+Telegram Affiliate Marketing Bot
 ==================================
+"""
 
 
 import logging
 import asyncio
+import os
 from datetime import time
+from dotenv import load_dotenv
 from telegram import Update, Bot
 from telegram.ext import (
     Application,
@@ -16,13 +19,24 @@ from telegram.ext import (
     filters,
 )
 
+# Load environment variables from .env file
+load_dotenv()
+
 # ─────────────────────────────────────────────
-# ✅ EDIT THESE THREE LINES
+# ✅ CREDENTIALS FROM ENVIRONMENT VARIABLES
 # ─────────────────────────────────────────────
-BOT_TOKEN   = "8746378784:AAH2Ozj6s3UaDW3leEf_fE4jTjQi8h6Aoxs"    # From @BotFather
-CHANNEL_ID  =  -1003876605131   # Your channel e.g. @myaffiliatechannel
-ADMIN_ID    = 7287914306                 # Your Telegram user ID (from @userinfobot)
+BOT_TOKEN   = os.getenv("BOT_TOKEN")      # From @BotFather
+CHANNEL_ID  = int(os.getenv("CHANNEL_ID", 0))   # Your channel ID
+ADMIN_ID    = int(os.getenv("ADMIN_ID", 0))     # Your Telegram user ID
 # ─────────────────────────────────────────────
+
+# Validate credentials
+if not BOT_TOKEN:
+    raise ValueError("❌ BOT_TOKEN is not set in environment variables")
+if CHANNEL_ID == 0:
+    raise ValueError("❌ CHANNEL_ID is not set in environment variables")
+if ADMIN_ID == 0:
+    raise ValueError("❌ ADMIN_ID is not set in environment variables")
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
