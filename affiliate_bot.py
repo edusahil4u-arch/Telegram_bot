@@ -148,16 +148,7 @@ async def welcome_new_member(update: Update, context: ContextTypes.DEFAULT_TYPE)
         new_user = result.new_chat_member.user
         name = new_user.first_name or "Friend"
 
-        welcome_msg = (
-            f"🎉 Welcome, *{name}*!\n\n"
-            f"You've joined our Affiliate Deals channel!\n\n"
-            f"Here you'll find:\n"
-            f"✅ Exclusive deals & discounts\n"
-            f"✅ Top product recommendations\n"
-            f"✅ Daily offers\n\n"
-            f"Type /deals to see today's best products!\n"
-            f"Type /help to see all commands."
-        )
+        welcome_msg = ("🎉 Welcome")
 
         await context.bot.send_message(
             chat_id=result.chat.id,
