@@ -336,16 +336,17 @@ async def cmd_save(update: Update, context: ContextTypes.DEFAULT_TYPE):
     wishlists[user_id].append(product_name)
     await update.message.reply_text(f"✅ *{product_name}* saved to your wishlist!", parse_mode="Markdown")
 
-
 async def cmd_subscribe(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     user_ids.add(user_id)
     subscribers.add(user_id)
-cursor.execute(
-    "INSERT OR IGNORE INTO subscribers (user_id) VALUES (?)",
-    (user_id,)
-)
-conn.commit()
+
+    cursor.execute(
+        "INSERT OR IGNORE INTO subscribers (user_id) VALUES (?)",
+        (user_id,)
+    )
+    conn.commit()
+
     await update.message.reply_text(
         "🔔 *Subscribed!*\n\n"
         "You'll now receive daily deal alerts!\n"
