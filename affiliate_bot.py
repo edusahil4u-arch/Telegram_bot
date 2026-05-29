@@ -335,7 +335,6 @@ async def cmd_save(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
     wishlists[user_id].append(product_name)
     await update.message.reply_text(f"✅ *{product_name}* saved to your wishlist!", parse_mode="Markdown")
-
 async def cmd_subscribe(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     user_ids.add(user_id)
@@ -353,8 +352,6 @@ async def cmd_subscribe(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "Type /unsubscribe to stop anytime.",
         parse_mode="Markdown"
     )
-
-
 async def cmd_unsubscribe(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     subscribers.discard(user_id)
