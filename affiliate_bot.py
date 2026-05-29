@@ -196,17 +196,20 @@ async def post_to_channel(bot: Bot):
     if not affiliate_products:
         return
 
-    product = affiliate_products[post_index % len(affiliate_products)]
-    post_index += 1
+    try:
+        product = affiliate_products[post_index % len(affiliate_products)]
+        post_index += 1
 
-    msg = (
-        f"{product['emoji']} *{product['name']}*\n\n"
-        f"📝 {product['description']}\n\n"
-        f"🔗 [Get it here!]({product['link']})\n\n"
-        f"━━━━━━━━━━━━━━━━\n"
-        f"🔔 Subscribe for more daily deals!"
-    )
-    await bot.send_message(chat_id=CHANNEL_ID, text=msg, parse_mode="Markdown")
+        msg = (
+            f"{product['emoji']} *{product['name']}*\n\n"
+            f"📝 {product['description']}\n\n"
+            f"🔗 [Get it here!]({product['link']})\n\n"
+            f"━━━━━━━━━━━━━━━━\n"
+            f"🔔 Subscribe for more daily deals!"
+        )
+        await bot.send_message(chat_id=CHANNEL_ID, text=msg, parse_mode="Markdown")
+    except Exception as e:
+        logger.error(f"Error posting to channel: {e}")
 
 
 async def scheduled_post(context: ContextTypes.DEFAULT_TYPE):
@@ -258,8 +261,7 @@ def main():
 
     # ── Schedule auto-post every 6 hours ──
     # Change 21600 to any seconds you want (3600 = 1 hour, 86400 = 24 hours)
-    job_queue = app.job_queue
-    job_queue.run_repeating(scheduled_post, interval=21600, first=10)
+    app.job_queue.run_repeating(scheduled_post, interval=21600, first=10)
 
     print("🤖 Bot is running... Press Ctrl+C to stop.")
     app.run_polling(drop_pending_updates=True)
