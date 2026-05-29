@@ -7,6 +7,7 @@ import logging
 import asyncio
 import os
 import time
+import sqlite3
 from dotenv import load_dotenv
 from telegram import Update, Bot
 from telegram.ext import (
@@ -39,7 +40,23 @@ if ADMIN_ID == 0:
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+# ════════════════════════════════════════════
+# SQLITE DATABASE
+# ════════════════════════════════════════════
 
+conn = sqlite3.connect("bot_data.db", check_same_thread=False)
+cursor = conn.cursor()
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS users (
+    user_id INTEGER PRIMARY KEY,
+    username TEXT,
+    first_name TEXT,
+    joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+""")
+
+conn.commit()
 # ── In-memory storage ──
 affiliate_products = [
     {
@@ -107,12 +124,25 @@ async def welcome_new_member(update: Update, context: ContextTypes.DEFAULT_TYPE)
             parse_mode="Markdown"
         )
 
-
+def save_user(user):
+    try:
+        cursor.execute("""
+        INSERT OR IGNORE INTO users (user_id, username, first_name)
+        VALUES (?, ?, ?)
+        """, (
+            user.id,
+            user.username,
+            user.first_name
+        ))
+        conn.commit()
+    except Exception as e:
+        logger.error(f"Database error: {e}")
 # ════════════════════════════════════════════
 # BASIC COMMANDS
 # ════════════════════════════════════════════
 async def cmd_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_ids.add(update.effective_user.id)
+save_user(update.effective_user)
     await update.message.reply_text(
         "👋 Welcome to *Affiliate Deals Bot!*\n\n"
         "🔥 Get the best deals every day!\n\n"
