@@ -55,6 +55,21 @@ CREATE TABLE IF NOT EXISTS users (
     joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )
 """)
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS subscribers (
+    user_id INTEGER PRIMARY KEY
+)
+""")
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS purchases (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    product_name TEXT,
+    amount TEXT,
+    purchased_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+""")
 
 conn.commit()
 # ── In-memory storage ──
@@ -142,6 +157,8 @@ def save_user(user):
 # ════════════════════════════════════════════
 async def cmd_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_ids.add(update.effective_user.id)
+
+
 save_user(update.effective_user)
     await update.message.reply_text(
         "👋 Welcome to *Affiliate Deals Bot!*\n\n"
@@ -324,6 +341,11 @@ async def cmd_subscribe(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     user_ids.add(user_id)
     subscribers.add(user_id)
+cursor.execute(
+    "INSERT OR IGNORE INTO subscribers (user_id) VALUES (?)",
+    (user_id,)
+)
+conn.commit()
     await update.message.reply_text(
         "🔔 *Subscribed!*\n\n"
         "You'll now receive daily deal alerts!\n"
