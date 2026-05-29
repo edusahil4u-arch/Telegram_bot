@@ -259,9 +259,7 @@ def main():
     # ── Handle regular messages (FAQ keywords) ──
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
-    # ── Schedule auto-post every 6 hours ──
-    # Change 21600 to any seconds you want (3600 = 1 hour, 86400 = 24 hours)
-    app.job_queue.run_repeating(scheduled_post, interval=21600, first=10)
+    
 
     print("🤖 Bot is running... Press Ctrl+C to stop.")
     app.run_polling(drop_pending_updates=True)
