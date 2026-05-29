@@ -7,7 +7,6 @@ Telegram Affiliate Marketing Bot.
 import logging
 import asyncio
 import os
-from datetime import time
 from dotenv import load_dotenv
 from telegram import Update, Bot
 from telegram.ext import (
@@ -266,4 +265,12 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    import time
+    while True:
+        try:
+            main()
+        except Exception as e:
+            logger.error(f"Bot crashed: {e}, restarting in 5s...")
+            time.sleep(5)
+
+    
