@@ -1,4 +1,4 @@
-# Environment variables
+# Environment variables - NEVER commit these!
 .env
 .env.local
 .env.*.local
@@ -21,14 +21,26 @@ parts/
 sdist/
 var/
 wheels/
+pip-wheel-metadata/
+share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+PIPFILE.lock
 
-# IDE
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# IDEs
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
+
+# OS
 .DS_Store
+Thumbs.db
